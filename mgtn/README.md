@@ -1,8 +1,10 @@
 # `mgtn/` — MGTN model and training/eval pipeline
 
-MGTN (Mesh Graph Transformer Network) is the model proposed in the paper. It
-keeps the MeshGraphNets encoder/decoder and edge construction but replaces the
-message-passing processor with a graph-aware Transformer processor.
+`mgtn` is the model proposed in the paper: it keeps the MeshGraphNets
+encoder/decoder and edge construction, but replaces the message-passing
+processor with a graph-aware Transformer processor (multi-head self-attention
+with an adjacency/attention bias and a geometric positional encoding derived
+from mesh node coordinates).
 
 The pipeline (data reading, encode–process–decode framework, online
 normalization, CFD/cloth wrappers, rollout evaluation, plotting, dataset
