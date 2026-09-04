@@ -1,0 +1,159 @@
+#!/bin/bash
+#SBATCH --job-name=cloth_FlagSimple_200
+#SBATCH --output=cloth_FlagSimple_200_%j.out
+#SBATCH --error=cloth_FlagSimple_200_%j.err
+#SBATCH --time=80:00:00
+#SBATCH --partition=quad_rtx_8000
+#SBATCH --gres=gpu:1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem=64G
+
+# ---------------------------
+# Safety & debug
+# ---------------------------
+set -e
+set -x
+
+echo "Job started on $(hostname)"
+echo "Start time: $(date)"
+
+# ---------------------------
+# Load conda safely (NO .bashrc)
+# ---------------------------
+source /home/cril/arafat/miniconda3/etc/profile.d/conda.sh
+
+conda activate mgn || {
+  echo "Conda activation failed"
+  exit 1
+}
+
+# Sanity checks (important for CF debugging)
+which python
+python --version
+nvidia-smi
+
+# ---------------------------
+# Go to project directory
+# ---------------------------
+cd /home/cril/arafat/MGN-C || exit 1
+
+# ---------------------------
+# Paths
+# ---------------------------
+DATA_DIR="Data/flag_simple"
+ROLLOUT_PATH="${DATA_DIR}/mgn/rollout.pkl"
+CHK_DIR="${DATA_DIR}/mgn/checkpoint"
+SAVE_PATH="test/Result"
+
+mkdir -p "${CHK_DIR}"
+
+
+# ---------------------------
+# Train MeshGraphNets (cloth)
+# ---------------------------
+echo "MGN Training started"
+
+python -m meshgraphnets.run_model \
+  --model=cloth \
+  --mode=train \
+  --checkpoint_dir="${CHK_DIR}" \
+  --dataset_dir="${DATA_DIR}" \
+  --num_training_steps=200000
+
+# ---------------------------
+# Rollout generation
+# ---------------------------
+echo "MGN Rollout started"
+
+python -m meshgraphnets.run_model \
+  --model=cloth \
+  --mode=eval \
+  --checkpoint_dir="${CHK_DIR}" \
+  --dataset_dir="${DATA_DIR}" \
+  --rollout_path="${ROLLOUT_PATH}" \
+  --num_rollouts=100
+
+
+
+# for mgtn model
+ROLLOUT_PATH_mgtn="${DATA_DIR}/mgtn/rollout.pkl"
+CHK_DIR_mgtn="${DATA_DIR}/mgtn/checkpoint"
+
+mkdir -p "${CHK_DIR_mgtn}"
+
+echo "mgtn training started"
+python -m mgtn.run_model \
+  --model=cloth \
+  --mode=train \
+  --checkpoint_dir="${CHK_DIR_mgtn}" \
+  --dataset_dir="${DATA_DIR}" \
+  --num_training_steps=200000
+
+echo "mgtn rollout started"
+
+python -m mgtn.run_model \
+  --model=cloth \
+  --mode=eval \
+  --checkpoint_dir="${CHK_DIR_mgtn}" \
+  --dataset_dir="${DATA_DIR}" \
+  --rollout_path="${ROLLOUT_PATH_mgtn}" \
+  --num_rollouts=100
+
+# python -m meshgraphnets.plot_cloth \
+#   --rollout_path="${ROLLOUT_PATH}"
+
+# python -m test.plot_gt_vs_pred\
+#   --rollout_path="${ROLLOUT_PATH}" \
+#   --save_path="${SAVE_PATH}"
+# # ---------------------------
+# # Cleanup
+# # ---------------------------
+
+# set -e
+
+# # Display commands being run.
+# set -x
+
+# #TMP_DIR=`mktemp -d`
+# TMP_DIR='Data/flag_simple'
+
+#python3.11 -m venv "${TMP_DIR}/env"
+#source "${TMP_DIR}/env/bin/activate"
+
+#conda create -n meshgraphnets python=3.7
+#conda activate meshgraphnets
+# Install dependencies.
+# pip install --upgrade -r meshgraphnets/requirements.txt
+
+# # Download minimal dataset
+# DATA_DIR="${TMP_DIR}"
+# #bash meshgraphnets/download_dataset.sh flag_minimal ${TMP_DIR}
+# SAVE_PATH="test/Result"
+
+# mkdir -p "${SAVE_PATH}"
+# # Train for a few steps.
+# # echo "Training started"
+# CHK_DIR="${TMP_DIR}/checkpoint"
+# # python -m mgtn.run_model --model=cloth --mode=train --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --num_training_steps=50000
+
+# echo "Generate a rollout trajectory"
+# # Generate a rollout trajectory
+# ROLLOUT_PATH="${TMP_DIR}/rollout.pkl"
+# python -m mgtn.run_model --model=cloth --mode=eval --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --rollout_path=${ROLLOUT_PATH} --num_rollouts=50
+
+# echo "Plot the rollout trajectory"
+# # Plot the rollout trajectory
+# python -m mgtn.plot_cloth --rollout_path=${ROLLOUT_PATH}
+
+# echo "plot ground truth vs prediction"
+
+# python -m test.plot_gt_vs_pred\
+#   --rollout_path="${ROLLOUT_PATH}" \
+#   --save_path="${SAVE_PATH}"
+# Clean up.
+#rm -r ${TMP_DIR}
+echo "Test run complete."
+
+conda deactivate
+
+echo "Job finished at: $(date)"

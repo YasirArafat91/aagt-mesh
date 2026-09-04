@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# # Cluster job logs (SLURM/PBS output, named with job IDs)
+# *.err
+# *.out
+
+# # Generated outputs
+# *.gif
+# figures/
+
+# Data / checkpoints
+*.h5
+*.hdf5
+*.tfrecord
+*.ckpt
+*.pt
+*.pth
+checkpoints/
