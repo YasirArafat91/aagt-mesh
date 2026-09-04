@@ -1,7 +1,7 @@
 #!/bin/bash
-#SBATCH --job-name=cfd_airfoil
-#SBATCH --output=cfd_airfoil_%j.out
-#SBATCH --error=cfd_airfoil_%j.err
+#SBATCH --job-name=cfd_cynf
+#SBATCH --output=cfd_cynf_%j.out
+#SBATCH --error=cfd_cynf_%j.err
 #SBATCH --time=70:00:00
 #SBATCH --partition=quad_rtx_8000
 #SBATCH --gres=gpu:1
@@ -10,8 +10,12 @@
 
 # ---------------------------
 # Load environment
+#   Set CONDA_ROOT and PROJECT_DIR for your own cluster/machine.
 # ---------------------------
-source /home/cril/arafat/miniconda3/etc/profile.d/conda.sh
+CONDA_ROOT="${CONDA_ROOT:-$HOME/miniconda3}"
+PROJECT_DIR="${PROJECT_DIR:-$HOME/aagt-mesh}"
+
+source "${CONDA_ROOT}/etc/profile.d/conda.sh"
 conda activate mgn
 
 # Safety check
@@ -20,10 +24,11 @@ conda activate mgn
 
 # ---------------------------
 # Go to project directory
+#   The meshgraphnets baseline package must be importable from here.
 # ---------------------------
-cd /home/cril/arafat/MGN-C || exit 1
+cd "${PROJECT_DIR}" || exit 1
 
-TMP_DIR='Data/airfoil'
+TMP_DIR='Data/cylinder_flow'
 DATA_DIR="${TMP_DIR}"
 ROLLOUT_PATH="${TMP_DIR}/mgn/rollout.pkl"
 CHK_DIR="${TMP_DIR}/mgn/checkpoint"
@@ -60,7 +65,7 @@ python -m meshgraphnets.run_model \
 #   --rollout_path=${ROLLOUT_PATH} 
 
 # python -m test.plot_cfd_gt_vs_pred.py \
-#     --rollout_path='Data/airfoil/mgn/rollout.pkl' \
+#     --rollout_path='Data/cylinder_flow/mgn/rollout.pkl' \
 #     --save_path='test/Result'
 
 ROLLOUT_PATH_mgtn="${TMP_DIR}/mgtn/rollout.pkl"

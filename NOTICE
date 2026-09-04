@@ -1,0 +1,14 @@
+AAGT-Mesh: Adjacency-Aware Graph Transformers for Learning Mesh Dynamics
+Copyright 2026 Md Yasir Arafat, Wissem Inoubli, Said Jabbour
+
+This product includes software derived from MeshGraphNets
+("Learning Mesh-Based Simulation with Graph Networks", Pfaff et al., ICLR 2021),
+Copyright 2020 DeepMind Technologies Limited, licensed under the
+Apache License, Version 2.0. Portions of the data pipeline, the encode-process-
+decode framework, the normalization utilities, the CFD/cloth model wrappers,
+the plotting scripts, and download_dataset.sh are adapted from that codebase
+(https://github.com/google-deepmind/deepmind-research/tree/master/meshgraphnets).
+
+Modifications by the AAGT-Mesh authors include the graph-aware Transformer
+processor (mgtn/TransformerBlock.py, mgtn/MultiHeadSelfAttention.py,
+mgtn/gpe.py) and its integration into the processor stack (mgtn/core_model.py).

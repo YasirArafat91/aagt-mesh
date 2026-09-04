@@ -39,10 +39,12 @@ trajectory behavior.
 ├── mgtn/                          # MGTN model, training/eval pipeline (see mgtn/README.md)
 ├── plot_three_panel.py            # Ground truth / MGN / MGTN comparison figure (flag_simple)
 ├── plot_cylinder_three_panel.py   # Ground truth / MGN / MGTN comparison figure (cylinder_flow)
-├── job_s_mgn_vs_mgt_cfd.sh        # SLURM job: train+rollout MGN vs MGTN on cylinder_flow/airfoil
+├── job_s_mgn_vs_mgt_cfd.sh        # SLURM job: train+rollout MGN vs MGTN on cylinder_flow
 ├── job_s_mgn_vs_mgt_cloth.sh      # SLURM job: train+rollout MGN vs MGTN on flag_simple
 ├── requirements-mgn.txt           # Pinned dependencies used for the experiments
-└── figures/                       # Generated comparison figures
+├── figures/                       # Generated comparison figures
+├── LICENSE                        # Apache License 2.0
+└── NOTICE                         # Attribution for code adapted from MeshGraphNets
 ```
 
 ## Setup
@@ -122,10 +124,11 @@ batch scripts used for the paper's experiments. Each one:
    for 200,000 steps and 100 rollouts, saving to
    `Data/<dataset>/mgtn/checkpoint` and `Data/<dataset>/mgtn/rollout.pkl`.
 
-`job_s_mgn_vs_mgt_cfd.sh` runs on the `airfoil` dataset with `--model=cfd`;
-`job_s_mgn_vs_mgt_cloth.sh` runs on `flag_simple` with `--model=cloth`. Submit
-with `sbatch job_s_mgn_vs_mgt_cfd.sh` / `sbatch job_s_mgn_vs_mgt_cloth.sh`
-(adjust the `cd`, partition, and conda paths for your cluster); logs are
+`job_s_mgn_vs_mgt_cfd.sh` runs on the `cylinder_flow` dataset with
+`--model=cfd`; `job_s_mgn_vs_mgt_cloth.sh` runs on `flag_simple` with
+`--model=cloth`. Set `CONDA_ROOT` and `PROJECT_DIR` (both default to `$HOME/...`)
+for your machine, adjust the partition/resources, then submit with
+`sbatch job_s_mgn_vs_mgt_cfd.sh` / `sbatch job_s_mgn_vs_mgt_cloth.sh`; logs are
 written to `<job-name>_<jobid>.out` / `.err` in the submission directory.
 
 ### MGN vs. MGTN comparison figures
@@ -141,8 +144,8 @@ python plot_three_panel.py \
     --traj 0 --step 50 --out figures/
 
 python plot_cylinder_three_panel.py \
-    --mgn  Data/airfoil/mgn/rollout.pkl \
-    --ours Data/airfoil/mgtn/rollout.pkl \
+    --mgn  Data/cylinder_flow/mgn/rollout.pkl \
+    --ours Data/cylinder_flow/mgtn/rollout.pkl \
     --traj 0 --step 50 --out figures/
 ```
 
@@ -172,4 +175,12 @@ This work builds on MeshGraphNets; please also cite:
       booktitle={International Conference on Learning Representations},
       year={2021}
     }
-# aagt-mesh
+
+## License
+
+Released under the [Apache License 2.0](LICENSE). Portions of the data
+pipeline and model framework are adapted from DeepMind's
+[MeshGraphNets](https://github.com/google-deepmind/deepmind-research/tree/master/meshgraphnets)
+(also Apache 2.0); see [`NOTICE`](NOTICE) for details. The MeshGraphNets
+datasets are distributed by DeepMind under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).

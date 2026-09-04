@@ -20,22 +20,21 @@ ENV/
 .idea/
 .DS_Store
 
-# Stray file from misparsed `-e` shell argument
+# Stray files from misparsed `-e` / `~` shell arguments
 mgtn/-e
+mgtn/~/
 
-# # Cluster job logs (SLURM/PBS output, named with job IDs)
-# *.err
-# *.out
+# Cluster job logs (SLURM/PBS output, named with job IDs)
+*.err
+*.out
 
-# # Generated outputs
-# *.gif
-# figures/
-
-# Data / checkpoints
+# Data / checkpoints / rollouts
+Data/
 *.h5
 *.hdf5
 *.tfrecord
 *.ckpt
 *.pt
 *.pth
+*.pkl
 checkpoints/

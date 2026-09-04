@@ -19,8 +19,12 @@ echo "Start time: $(date)"
 
 # ---------------------------
 # Load conda safely (NO .bashrc)
+#   Set CONDA_ROOT and PROJECT_DIR for your own cluster/machine.
 # ---------------------------
-source /home/cril/arafat/miniconda3/etc/profile.d/conda.sh
+CONDA_ROOT="${CONDA_ROOT:-$HOME/miniconda3}"
+PROJECT_DIR="${PROJECT_DIR:-$HOME/aagt-mesh}"
+
+source "${CONDA_ROOT}/etc/profile.d/conda.sh"
 
 conda activate mgn || {
   echo "Conda activation failed"
@@ -34,8 +38,9 @@ nvidia-smi
 
 # ---------------------------
 # Go to project directory
+#   The meshgraphnets baseline package must be importable from here.
 # ---------------------------
-cd /home/cril/arafat/MGN-C || exit 1
+cd "${PROJECT_DIR}" || exit 1
 
 # ---------------------------
 # Paths
