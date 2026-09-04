@@ -20,6 +20,9 @@ ENV/
 .idea/
 .DS_Store
 
+# Stray file from misparsed `-e` shell argument
+mgtn/-e
+
 # # Cluster job logs (SLURM/PBS output, named with job IDs)
 # *.err
 # *.out
