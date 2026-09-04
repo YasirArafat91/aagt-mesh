@@ -1,0 +1,50 @@
+
+import collections
+import functools
+import sonnet as snt
+import tensorflow.compat.v1 as tf
+import MultiHeadSelfAttention
+
+# ---------------------------------------------------------------------------
+# Transformer block (self-attention + FFN + residual + layer-norm)
+# ---------------------------------------------------------------------------
+
+class TransformerBlock(snt.AbstractModule):
+  """One Transformer encoder layer applied over node tokens.
+
+  Uses pre-norm (LayerNorm before sub-layer) for training stability.
+  """
+
+  def __init__(self, model_dim, num_heads, ffn_dim, name='TransformerBlock'):
+    super(TransformerBlock, self).__init__(name=name)
+    self._model_dim = model_dim
+    self._num_heads = num_heads
+    self._ffn_dim = ffn_dim
+
+  def _build(self, x, attention_bias=None):
+    """
+    Args:
+      x              : [N, D] node (or edge) feature tensor
+      attention_bias : optional [N, N] additive bias for attention logits
+    Returns:
+      [N, D] updated features
+    """
+    # --- Self-attention sub-layer (pre-norm) ---
+    with tf.variable_scope('attn'):
+      x_norm = snt.LayerNorm()(x)
+      attn_out = MultiHeadSelfAttention(self._num_heads, self._model_dim)(
+          x_norm, bias=attention_bias)
+      x = x + attn_out  # residual
+
+    # --- Feed-forward sub-layer (pre-norm) ---
+    with tf.variable_scope('ffn'):
+      x_norm = snt.LayerNorm()(x)
+      ffn = snt.nets.MLP(
+          [self._ffn_dim, self._model_dim],
+          activate_final=False,
+          activation=tf.nn.relu,
+      )
+      x = x + ffn(x_norm)  # residual
+
+    return x
+
