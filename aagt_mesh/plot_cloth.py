@@ -69,7 +69,7 @@ def main(unused_argv):
     return fig,
 
   ani = animation.FuncAnimation(fig, animate, frames=num_frames, interval=100) #writer = animation.FFMpegWriter(fps=10)
-  ani.save("mgtn_fm_cloth_plot_100.gif", writer=PillowWriter(fps=10))
+  ani.save("aagt_mesh_fm_cloth_plot_100.gif", writer=PillowWriter(fps=10))
   # plt.show(block=True)
   plt.close()
 

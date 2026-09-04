@@ -68,16 +68,16 @@ python -m meshgraphnets.run_model \
 #     --rollout_path='Data/cylinder_flow/mgn/rollout.pkl' \
 #     --save_path='test/Result'
 
-ROLLOUT_PATH_mgtn="${TMP_DIR}/mgtn/rollout.pkl"
-CHK_DIR_mgtn="${TMP_DIR}/mgtn/checkpoint"
+ROLLOUT_PATH_aagt="${TMP_DIR}/aagt_mesh/rollout.pkl"
+CHK_DIR_aagt="${TMP_DIR}/aagt_mesh/checkpoint"
 
-mkdir -p "${CHK_DIR_mgtn}"
+mkdir -p "${CHK_DIR_aagt}"
 
 echo "training started"
-python -m mgtn.run_model \
+python -m aagt_mesh.run_model \
   --model=cfd \
   --mode=train \
-  --checkpoint_dir=${CHK_DIR_mgtn} \
+  --checkpoint_dir=${CHK_DIR_aagt} \
   --dataset_dir=${DATA_DIR} \
   --num_training_steps=200000
 
@@ -85,11 +85,11 @@ python -m mgtn.run_model \
 # Generate a rollout trajectory
 
 echo "Rollout started"
-python -m mgtn.run_model \
+python -m aagt_mesh.run_model \
   --model=cfd --mode=eval \
-  --checkpoint_dir=${CHK_DIR_mgtn} \
+  --checkpoint_dir=${CHK_DIR_aagt} \
   --dataset_dir=${DATA_DIR} \
-  --rollout_path=${ROLLOUT_PATH_mgtn} \
+  --rollout_path=${ROLLOUT_PATH_aagt} \
   --num_rollouts=100
 #Deactivate conda environment
 conda deactivate

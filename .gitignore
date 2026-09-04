@@ -21,8 +21,8 @@ ENV/
 .DS_Store
 
 # Stray files from misparsed `-e` / `~` shell arguments
-mgtn/-e
-mgtn/~/
+aagt_mesh/-e
+aagt_mesh/~/
 
 # Cluster job logs (SLURM/PBS output, named with job IDs)
 *.err

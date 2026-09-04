@@ -1,6 +1,6 @@
 # Pinned dependencies for the "mgn" conda environment used by
 # job_s_mgn_vs_mgt_cfd.sh and job_s_mgn_vs_mgt_cloth.sh to train/eval both
-# the MeshGraphNets baseline and MGTN (TensorFlow 1.x / Sonnet 1, Python <=3.7).
+# the MeshGraphNets baseline and AAGT-Mesh (TensorFlow 1.x / Sonnet 1, Python <=3.7).
 # Install with: pip install -r requirements-mgn.txt
 absl-py==1.4.0
 astor==0.8.1

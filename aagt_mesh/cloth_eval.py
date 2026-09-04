@@ -17,7 +17,7 @@
 
 import tensorflow.compat.v1 as tf
 
-from mgtn.common import NodeType
+from aagt_mesh.common import NodeType
 
 
 def _rollout(model, initial_state, num_steps):

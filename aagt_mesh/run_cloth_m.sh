@@ -38,14 +38,14 @@ SAVE_PATH="test/Result"
 mkdir -p "${SAVE_PATH}"
 # Train for a few steps.
 CHK_DIR="${TMP_DIR}/checkpoint"
-python -m mgtn.run_model --model=cloth --mode=train --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --num_training_steps=50000
+python -m aagt_mesh.run_model --model=cloth --mode=train --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --num_training_steps=50000
 
 # Generate a rollout trajectory
 ROLLOUT_PATH="${TMP_DIR}/rollout.pkl"
-python -m mgtn.run_model --model=cloth --mode=eval --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --rollout_path=${ROLLOUT_PATH} --num_rollouts=50
+python -m aagt_mesh.run_model --model=cloth --mode=eval --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --rollout_path=${ROLLOUT_PATH} --num_rollouts=50
 
 # Plot the rollout trajectory
-python -m mgtn.plot_cloth --rollout_path=${ROLLOUT_PATH}
+python -m aagt_mesh.plot_cloth --rollout_path=${ROLLOUT_PATH}
 
 python -m test.plot_gt_vs_pred\
   --rollout_path="${ROLLOUT_PATH}" \

@@ -80,28 +80,28 @@ python -m meshgraphnets.run_model \
 
 
 
-# for mgtn model
-ROLLOUT_PATH_mgtn="${DATA_DIR}/mgtn/rollout.pkl"
-CHK_DIR_mgtn="${DATA_DIR}/mgtn/checkpoint"
+# for aagt-mesh (ours)
+ROLLOUT_PATH_aagt="${DATA_DIR}/aagt_mesh/rollout.pkl"
+CHK_DIR_aagt="${DATA_DIR}/aagt_mesh/checkpoint"
 
-mkdir -p "${CHK_DIR_mgtn}"
+mkdir -p "${CHK_DIR_aagt}"
 
-echo "mgtn training started"
-python -m mgtn.run_model \
+echo "aagt-mesh training started"
+python -m aagt_mesh.run_model \
   --model=cloth \
   --mode=train \
-  --checkpoint_dir="${CHK_DIR_mgtn}" \
+  --checkpoint_dir="${CHK_DIR_aagt}" \
   --dataset_dir="${DATA_DIR}" \
   --num_training_steps=200000
 
-echo "mgtn rollout started"
+echo "aagt-mesh rollout started"
 
-python -m mgtn.run_model \
+python -m aagt_mesh.run_model \
   --model=cloth \
   --mode=eval \
-  --checkpoint_dir="${CHK_DIR_mgtn}" \
+  --checkpoint_dir="${CHK_DIR_aagt}" \
   --dataset_dir="${DATA_DIR}" \
-  --rollout_path="${ROLLOUT_PATH_mgtn}" \
+  --rollout_path="${ROLLOUT_PATH_aagt}" \
   --num_rollouts=100
 
 # python -m meshgraphnets.plot_cloth \
@@ -139,16 +139,16 @@ python -m mgtn.run_model \
 # # Train for a few steps.
 # # echo "Training started"
 # CHK_DIR="${TMP_DIR}/checkpoint"
-# # python -m mgtn.run_model --model=cloth --mode=train --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --num_training_steps=50000
+# # python -m aagt_mesh.run_model --model=cloth --mode=train --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --num_training_steps=50000
 
 # echo "Generate a rollout trajectory"
 # # Generate a rollout trajectory
 # ROLLOUT_PATH="${TMP_DIR}/rollout.pkl"
-# python -m mgtn.run_model --model=cloth --mode=eval --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --rollout_path=${ROLLOUT_PATH} --num_rollouts=50
+# python -m aagt_mesh.run_model --model=cloth --mode=eval --checkpoint_dir=${CHK_DIR} --dataset_dir=${DATA_DIR} --rollout_path=${ROLLOUT_PATH} --num_rollouts=50
 
 # echo "Plot the rollout trajectory"
 # # Plot the rollout trajectory
-# python -m mgtn.plot_cloth --rollout_path=${ROLLOUT_PATH}
+# python -m aagt_mesh.plot_cloth --rollout_path=${ROLLOUT_PATH}
 
 # echo "plot ground truth vs prediction"
 
