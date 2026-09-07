@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Stray files from misparsed `-e` / `~` shell arguments
+aagt_mesh/-e
+aagt_mesh/~/
+
+# Cluster job logs (SLURM/PBS output, named with job IDs)
+*.err
+*.out
+
+# Data / checkpoints / rollouts
+Data/
+*.h5
+*.hdf5
+*.tfrecord
+*.ckpt
+*.pt
+*.pth
+*.pkl
+checkpoints/
